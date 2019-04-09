@@ -8,18 +8,6 @@ namespace Iflee.Psfs
 {
     public class PsfCreateAircraft
     {
-        [FromQuery(Name = "type")]
-        public string Type { get; set; }
-
-        [FromQuery(Name = "boardNumber")]
-        public string BoardNumber { get; set; }
-
-        [FromQuery(Name = "mark")]
-        public string Mark { get; set; }
-
-        [FromQuery(Name = "model")]
-        public string Model { get; set; }
-
         public bool IsValid()
         {
             if (string.IsNullOrEmpty(Type)
@@ -31,5 +19,17 @@ namespace Iflee.Psfs
             }
             return true;
         }
+
+        [FromBody]
+        public string BoardNumber { get; set; }
+
+        [FromBody]
+        public string Mark { get; set; }
+
+        [FromBody]
+        public string Model { get; set; }
+
+        [FromBody]
+        public string Type { get; set; }
     }
 }

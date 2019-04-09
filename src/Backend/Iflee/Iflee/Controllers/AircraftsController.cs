@@ -22,6 +22,30 @@ namespace Iflee.Controllers
             this.ifleeContext = ifleeContext;
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            string sqlQuery = @"DELETE FROM aircrafts WHERE 
+                aircrafts.id = @aircraftId;";
+            using (var dbTransaction
+                = ifleeContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    ifleeContext.Database.ExecuteSqlCommand(sqlQuery,
+                        new NpgsqlParameter("@aircraftId", id));
+                    ifleeContext.SaveChanges();
+                    dbTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbTransaction.Rollback();
+                    return StatusCode(500);
+                }
+            }
+            return Ok();
+        }
+
         [HttpGet]
         public IActionResult Get([FromQuery] PsfReadAircrafts
             psfReadAircrafts)
@@ -59,11 +83,11 @@ namespace Iflee.Controllers
         }
 
         [HttpPost]
-        public void Post([FromQuery] PsfCreateAircraft psfCreateAircraft)
+        public IActionResult Post([FromBody] PsfCreateAircraft psfCreateAircraft)
         {
             if (!psfCreateAircraft.IsValid())
             {
-                return;
+                return BadRequest();
             }
             string sqlQuery = @"INSERT INTO aircrafts ( type, board_number,
                 mark, model ) VALUES( @aircraftType, @aircraftBoardNumber,
@@ -88,16 +112,18 @@ namespace Iflee.Controllers
                 catch (Exception)
                 {
                     dbTransaction.Rollback();
+                    return BadRequest();
                 }
             }
+            return Ok();
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromQuery] PsfUpdateAircraft
+        public IActionResult Put(int id, [FromQuery] PsfUpdateAircraft
             psfUpdateAircraft)
         {
             if (!psfUpdateAircraft.IsValid())
-                return;
+                return BadRequest();
             {
             }
             StringBuilder sqlQueryBuilder = new StringBuilder(
@@ -145,30 +171,10 @@ namespace Iflee.Controllers
                 catch (Exception)
                 {
                     dbTransaction.Rollback();
+                    return StatusCode(500);
                 }
             }
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-            string sqlQuery = @"DELETE FROM aircrafts WHERE 
-                aircrafts.id = @aircraftId;";
-            using (var dbTransaction
-                = ifleeContext.Database.BeginTransaction())
-            {
-                try
-                {
-                    ifleeContext.Database.ExecuteSqlCommand(sqlQuery,
-                        new NpgsqlParameter("@aircraftId", id));
-                    ifleeContext.SaveChanges();
-                    dbTransaction.Commit();
-                }
-                catch (Exception)
-                {
-                    dbTransaction.Rollback();
-                }
-            }
+            return Ok();
         }
     }
 }

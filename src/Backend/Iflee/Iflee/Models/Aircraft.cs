@@ -11,11 +11,7 @@ namespace Iflee.Models
     public class Aircraft
     {
         [Column("id")]
-        public int ID { get; set; }
-
-        [Column("type", TypeName = "VARCHAR(255)"), Display(Name = "Type"),
-            Required, MaxLength(255)]
-        public string Type { get; set; }
+        public int Id { get; set; }
 
         [Column("board_number", TypeName = "VARCHAR(20)"),
             Display(Name = "BoardNumber"), Required, MaxLength(255)]
@@ -28,5 +24,9 @@ namespace Iflee.Models
         [Column("model", TypeName = "VARCHAR(255)"), Display(Name = "Model"),
             Required, MaxLength(10)]
         public string Model { get; set; }
+
+        [Column("type", TypeName = "VARCHAR(255)"), Display(Name = "Type"),
+            Required, MaxLength(255)]
+        public string Type { get; set; }
     }
 }

@@ -8,23 +8,6 @@ namespace Iflee.Psfs
 {
     public class PsfUpdateAircraft
     {
-        [FromQuery(Name = "type")]
-        public string Type { get; set; }
-
-        [FromQuery(Name = "boardNumber")]
-        public string BoardNumber { get; set; }
-
-        [FromQuery(Name = "mark")]
-        public string Mark { get; set; }
-
-        [FromQuery(Name = "model")]
-        public string Model { get; set; }
-
-        public bool IsTypeValid()
-        {
-            return !string.IsNullOrEmpty(Type);
-        }
-
         public bool IsBoardNumberValid()
         {
             return !string.IsNullOrEmpty(BoardNumber);
@@ -40,6 +23,11 @@ namespace Iflee.Psfs
             return !string.IsNullOrEmpty(Model);
         }
 
+        public bool IsTypeValid()
+        {
+            return !string.IsNullOrEmpty(Type);
+        }
+
         public bool IsValid()
         {
             if (IsTypeValid() || IsBoardNumberValid() || IsMarkValid()
@@ -49,5 +37,17 @@ namespace Iflee.Psfs
             }
             return false;
         }
+
+        [FromQuery(Name = "boardNumber")]
+        public string BoardNumber { get; set; }
+
+        [FromQuery(Name = "mark")]
+        public string Mark { get; set; }
+
+        [FromQuery(Name = "model")]
+        public string Model { get; set; }
+
+        [FromQuery(Name = "type")]
+        public string Type { get; set; }
     }
 }
