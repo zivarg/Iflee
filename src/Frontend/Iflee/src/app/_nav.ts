@@ -30,15 +30,20 @@ export interface NavData {
 }
 
 export const navItems: NavData[] = [
-  // {
-  //   name: 'Dashboard',
-  //   url: '/dashboard',
-  //   icon: 'icon-speedometer',
-  //   badge: {
-  //     variant: 'info',
-  //     text: 'NEW'
-  //   }
-  // },
+  {
+    name: 'Dashboard',
+    url: '/dashboard',
+    icon: 'icon-speedometer',
+    // badge: {
+    //   variant: 'info',
+    //   text: 'NEW'
+    // }
+  },
+  {
+    name: 'Аэропорты',
+    url: '/airports',
+    icon: 'icon-home'
+  }
   // {
   //   title: true,
   //   name: 'Theme'
