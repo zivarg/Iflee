@@ -36,6 +36,7 @@ namespace Iflee.Controllers
                         new NpgsqlParameter("@aircraftId", id));
                     ifleeContext.SaveChanges();
                     dbTransaction.Commit();
+                    return Ok();
                 }
                 catch (Exception)
                 {
@@ -43,7 +44,22 @@ namespace Iflee.Controllers
                     return StatusCode(500);
                 }
             }
-            return Ok();
+        }
+
+        [Route("total")]
+        public IActionResult Total()
+        {
+            string sqlQuery = @"SELECT ROW_NUMBER() OVER(ORDER BY mark) AS value COUNT(*) AS value FROM aircrafts";
+            //try
+            //{
+                var aircraftsTotal = ifleeContext.aircraftsTotals.FromSql(
+                    sqlQuery).ToList();
+                return Ok(aircraftsTotal.FirstOrDefault());
+            //}
+            //catch (Exception)
+            //{
+                //return StatusCode(500);
+            //}
         }
 
         [HttpGet]
@@ -66,10 +82,18 @@ namespace Iflee.Controllers
                 sqlQueryParameters.Add(new NpgsqlParameter("@limitRowCount",
                     psfReadAircrafts.LimitRowCount));
             }
+            sqlQueryBuilder.Append(";");
             string sqlQuery = sqlQueryBuilder.ToString();
-            var aircrafts = ifleeContext.Aircrafts.FromSql( sqlQuery,
+            try
+            {
+                var aircrafts = ifleeContext.Aircrafts.FromSql(sqlQuery,
                 sqlQueryParameters.ToArray()).ToList();
-            return Ok(aircrafts);
+                return Ok(aircrafts);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
         }
 
         [HttpGet("{id}")]
@@ -77,13 +101,22 @@ namespace Iflee.Controllers
         {
             string sqlQuery = @"SELECT * FROM aircrafts
                 WHERE aircrafts.id = @aircraftId";
-            var aircrafts = ifleeContext.Aircrafts.FromSql(sqlQuery,
-                new NpgsqlParameter("@aircraftId", id)).ToList();
-            return Ok(aircrafts.FirstOrDefault());
+            try
+            {
+                var aircrafts = ifleeContext.Aircrafts.FromSql(sqlQuery,
+                    new NpgsqlParameter("@aircraftId", id)).ToList();
+                return Ok(aircrafts.FirstOrDefault());
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] PsfCreateAircraft psfCreateAircraft)
+        public IActionResult Post([FromBody] PsfCreateAircraft
+            psfCreateAircraft)
         {
             if (!psfCreateAircraft.IsValid())
             {
@@ -108,6 +141,7 @@ namespace Iflee.Controllers
                             psfCreateAircraft.Model));
                     ifleeContext.SaveChanges();
                     dbTransaction.Commit();
+                    return Ok();
                 }
                 catch (Exception)
                 {
@@ -115,7 +149,6 @@ namespace Iflee.Controllers
                     return BadRequest();
                 }
             }
-            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -167,6 +200,7 @@ namespace Iflee.Controllers
                         sqlQueryParameters.ToArray());
                     ifleeContext.SaveChanges();
                     dbTransaction.Commit();
+                    return Ok();
                 }
                 catch (Exception)
                 {
@@ -174,7 +208,6 @@ namespace Iflee.Controllers
                     return StatusCode(500);
                 }
             }
-            return Ok();
         }
     }
 }

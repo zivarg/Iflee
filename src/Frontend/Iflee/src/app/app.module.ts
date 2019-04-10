@@ -64,7 +64,6 @@ registerLocaleData(en);
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    // NgZorroAntdModule
   ],
   declarations: [
     AppComponent,
@@ -72,7 +71,7 @@ registerLocaleData(en);
     P404Component,
     P500Component,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
   ],
   providers: [{
     provide: LocationStrategy,

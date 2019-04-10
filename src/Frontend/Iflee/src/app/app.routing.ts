@@ -70,6 +70,10 @@ export const routes: Routes = [
         path: 'airports',
         loadChildren: './views/airports/airports.module#AirportsModule'
       },
+      {
+        path: 'aircrafts',
+        loadChildren: './views/aircrafts/aircrafts.module#AircraftsModule'
+      },
       // {
       //   path: 'icons',
       //   loadChildren: './views/icons/icons.module#IconsModule'

@@ -43,6 +43,11 @@ export const navItems: NavData[] = [
     name: 'Аэропорты',
     url: '/airports',
     icon: 'icon-home'
+  },
+  {
+    name: 'Самолеты',
+    url: '/aircrafts',
+    icon: 'icon-plane'
   }
   // {
   //   title: true,
