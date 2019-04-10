@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { LocationStrategy, HashLocationStrategy, registerLocaleData } from '@angular/common';
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -39,6 +39,13 @@ import { AppRoutingModule } from './app.routing';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
+import {NgZorroAntdModule, NZ_I18N, en_US} from 'ng-zorro-antd';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import en from '@angular/common/locales/en';
+
+registerLocaleData(en);
 
 @NgModule({
   imports: [
@@ -52,7 +59,12 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
     PerfectScrollbarModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
-    ChartsModule
+    ChartsModule,
+    NgZorroAntdModule,
+    FormsModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    // NgZorroAntdModule
   ],
   declarations: [
     AppComponent,
@@ -65,7 +77,7 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
   providers: [{
     provide: LocationStrategy,
     useClass: HashLocationStrategy
-  }],
+  }, { provide: NZ_I18N, useValue: en_US }],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

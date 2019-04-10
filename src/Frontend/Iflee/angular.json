@@ -17,9 +17,15 @@
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "assets": [
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              },
               "src/assets"
             ],
             "styles": [
+              "./node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
               "node_modules/@coreui/icons/css/coreui-icons.css",
               "node_modules/flag-icon-css/css/flag-icon.css",
               "node_modules/font-awesome/css/font-awesome.css",
@@ -27,7 +33,9 @@
               "src/scss/style.scss"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["./node_modules"]
+              "includePaths": [
+                "./node_modules"
+              ]
             },
             "scripts": [
               "node_modules/chart.js/dist/Chart.min.js"
@@ -81,13 +89,16 @@
               "node_modules/chart.js/dist/Chart.min.js"
             ],
             "styles": [
+              "./node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
               "node_modules/flag-icon-css/css/flag-icon.css",
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/simple-line-icons/css/simple-line-icons.css",
               "src/scss/style.scss"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["./node_modules"]
+              "includePaths": [
+                "./node_modules"
+              ]
             },
             "assets": [
               "src/assets",
