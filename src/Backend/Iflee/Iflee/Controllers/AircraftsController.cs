@@ -46,23 +46,6 @@ namespace Iflee.Controllers
             }
         }
 
-        [Route("total")]
-        public IActionResult Total()
-        {
-            string sqlQuery = @"SELECT 1 AS id, COUNT(*) AS value FROM 
-                aircrafts;";
-            try
-            {
-                var aircraftsTotals = ifleeContext.aircraftsTotals.FromSql(
-                    sqlQuery).ToList();
-                return Ok(aircraftsTotals.FirstOrDefault());
-            }
-            catch (Exception)
-            {
-                return StatusCode(500);
-            }
-        }
-
         [HttpGet]
         public IActionResult Get([FromQuery] PsfReadAircrafts
             psfReadAircrafts)
@@ -208,6 +191,23 @@ namespace Iflee.Controllers
                     dbTransaction.Rollback();
                     return StatusCode(500);
                 }
+            }
+        }
+
+        [Route("total")]
+        public IActionResult Total()
+        {
+            string sqlQuery = @"SELECT 1 AS id, COUNT(*) AS value FROM 
+                aircrafts;";
+            try
+            {
+                var aircraftsTotals = ifleeContext.aircraftsTotals.FromSql(
+                    sqlQuery).ToList();
+                return Ok(aircraftsTotals.FirstOrDefault());
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
             }
         }
     }

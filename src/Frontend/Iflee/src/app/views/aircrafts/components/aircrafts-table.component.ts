@@ -82,6 +82,7 @@ export class AircraftsTableComponent implements OnInit {
       this.total = Number(total.value);
       this.listOfData = aircrafts;
     }, () => {
+      this.loading = false;
       this.messageService.error('Данные от сервера не могут быть получены');
     });
   }
@@ -98,9 +99,11 @@ export class AircraftsTableComponent implements OnInit {
         this.listOfData = aircrafts;
         this.messageService.success('Операция успешно выполнена');
       }, () => {
+        this.loading = false;
         this.messageService.error('Операция не может быть выполнена выполнена');
       });
     }, () => {
+      this.loading = false;
       this.messageService.error('Операция не может быть выполнена выполнена');
     });
   }
