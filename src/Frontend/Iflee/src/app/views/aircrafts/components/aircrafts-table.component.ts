@@ -1,63 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {AircraftsService} from '../../../services/aircrafts.service';
 import {forkJoin} from 'rxjs/internal/observable/forkJoin';
-import {NzMessageConfig, NzMessageService} from 'ng-zorro-antd';
+import {NzMessageService} from 'ng-zorro-antd';
 
 @Component({
   selector: 'aircrafts-table',
   providers: [AircraftsService],
-  template: `    
-    <button nz-button nzType="primary" [disabled]="loading">Добавить новый самолет</button>
-    <button nz-button nzType="default" [disabled]="loading" (click)="fetch()">Обновить</button>
-    <nz-table 
-      #ajaxTable 
-      nzShowSizeChanger 
-      [nzFrontPagination]="false" 
-      [nzData]="listOfData" 
-      [nzLoading]="loading" 
-      [nzTotal]="total" 
-      [(nzPageIndex)]="pageIndex" 
-      [(nzPageSize)]="pageSize" 
-      (nzPageIndexChange)="fetch()" 
-      (nzPageSizeChange)="fetch(true)"
-    >
-      <thead>
-        <tr>
-          <th>Бортовой номер</th>
-          <th>Марка</th>
-          <th>Модель</th>
-          <th>Тип</th>
-          <th>Действие</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of ajaxTable.data">
-          <td>{{ data.boardNumber }}</td>
-          <td>{{ data.mark }}</td>
-          <td>{{ data.model }}</td>
-          <td>{{ data.type }}</td>
-          <td>
-            <button nz-button nzType="default">Редактировать</button>
-            <a nz-popconfirm
-               nzTitle="Вы уверены, что хотите удалить?"
-               nzOkText="Да"
-               nzCancelText="Нет" (nzOnConfirm)="delete(data.id)"
-            >
-              <button nz-button nzType="danger">Удалить</button>
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
-  `,
-  styles: [
-    `
-      [nz-button] {
-        margin-right: 8px;
-        margin-bottom: 12px;
-      }
-    `
-  ]
+  templateUrl: 'aircrafts-table.component.html',
+  styleUrls: ['aircrafts-table.component.css']
 })
 
 export class AircraftsTableComponent implements OnInit {
