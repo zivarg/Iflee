@@ -22,5 +22,9 @@ export class AircraftsService {
     return this.http.get<AircraftsTotalModel>(`${this.apiAircraftsUrl}/total`);
   }
 
+  delete(id: bigint): Observable<{}> {
+    return this.http.delete<{}>(`${this.apiAircraftsUrl}/${id}`);
+  }
+
   constructor(private http: HttpClient) {}
 }

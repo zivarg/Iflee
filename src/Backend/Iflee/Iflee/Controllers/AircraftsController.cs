@@ -49,17 +49,18 @@ namespace Iflee.Controllers
         [Route("total")]
         public IActionResult Total()
         {
-            string sqlQuery = @"SELECT ROW_NUMBER() OVER(ORDER BY mark) AS value COUNT(*) AS value FROM aircrafts";
-            //try
-            //{
-                var aircraftsTotal = ifleeContext.aircraftsTotals.FromSql(
+            string sqlQuery = @"SELECT 1 AS id, COUNT(*) AS value FROM 
+                aircrafts;";
+            try
+            {
+                var aircraftsTotals = ifleeContext.aircraftsTotals.FromSql(
                     sqlQuery).ToList();
-                return Ok(aircraftsTotal.FirstOrDefault());
-            //}
-            //catch (Exception)
-            //{
-                //return StatusCode(500);
-            //}
+                return Ok(aircraftsTotals.FirstOrDefault());
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
         }
 
         [HttpGet]

@@ -39,7 +39,7 @@ import { AppRoutingModule } from './app.routing';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
-import {NgZorroAntdModule, NZ_I18N, en_US} from 'ng-zorro-antd';
+import {NgZorroAntdModule, NZ_I18N, en_US, NZ_MESSAGE_CONFIG} from 'ng-zorro-antd';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -76,7 +76,8 @@ registerLocaleData(en);
   providers: [{
     provide: LocationStrategy,
     useClass: HashLocationStrategy
-  }, { provide: NZ_I18N, useValue: en_US }],
+  }, { provide: NZ_I18N, useValue: en_US },
+    { provide: NZ_MESSAGE_CONFIG, useValue: { nzTop: 79 } }],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
