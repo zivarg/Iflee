@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AircraftsService} from '../../../services/aircrafts.service';
 import {forkJoin} from 'rxjs/internal/observable/forkJoin';
 import {NzMessageService} from 'ng-zorro-antd';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'aircrafts-table',
@@ -16,8 +17,55 @@ export class AircraftsTableComponent implements OnInit {
   total = 0;
   listOfData = [];
   loading = true;
+  isVisibleItemModal = false;
+  editId = -1;
+  itemForm: FormGroup;
+  isItemModalBoardNumberValidation = false;
+  isItemModalBoardNumberExists = false;
 
-  constructor(private aircraftsService: AircraftsService, private messageService: NzMessageService) {}
+  constructor(private aircraftsService: AircraftsService, private messageService: NzMessageService,
+              private formBuilder: FormBuilder) {}
+
+  itemModalOk(): void {
+    this.isVisibleItemModal = false;
+  }
+
+  editIndex(id: number): number {
+    if (id === -1) {
+      return -1;
+    }
+    for (let i = 0; i < this.listOfData.length; i++) {
+      if (this.listOfData[i].id === id) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  isItemModalBoardNumberValid(): boolean {
+    return this.itemForm.get('boardNumber').dirty && !this.itemForm.get('boardNumber').errors && !this.isItemModalBoardNumberExists;
+  }
+
+  isItemModalDataValid(): boolean {
+    return this.isItemModalBoardNumberValid();
+  }
+
+  itemModalCancel(): void {
+    this.editId = -1;
+    this.isVisibleItemModal = false;
+  }
+
+  showItemModal(id: number = -1): void {
+    this.itemForm.reset();
+    if (id !== -1) {
+      const listItem = this.listOfData[this.editIndex(id)];
+      this.itemForm.patchValue({
+        boardNumber: listItem.boardNumber
+      });
+    }
+    this.editId = id;
+    this.isVisibleItemModal = true;
+  }
 
   fetch(fromFirstPage: boolean = false): void {
     if (fromFirstPage) {
@@ -50,15 +98,44 @@ export class AircraftsTableComponent implements OnInit {
         this.messageService.success('Операция успешно выполнена');
       }, () => {
         this.loading = false;
-        this.messageService.error('Операция не может быть выполнена выполнена');
+        this.total = 0;
+        this.listOfData = [];
+        this.messageService.error('Операция не может быть выполнена');
       });
     }, () => {
       this.loading = false;
-      this.messageService.error('Операция не может быть выполнена выполнена');
+      this.total = 0;
+      this.listOfData = [];
+      this.messageService.error('Операция не может быть выполнена');
     });
   }
 
   ngOnInit(): void {
+    this.itemForm = this.formBuilder.group({
+      boardNumber: [null, [Validators.required]]
+    });
+    this.itemForm.controls['boardNumber'].valueChanges.subscribe(
+      (value) => {
+        this.isItemModalBoardNumberExists = false;
+        if (value === '') {
+          return;
+        }
+        if ( this.editId !== -1) {
+          const listItem = this.listOfData[this.editIndex(this.editId)];
+          if (value === listItem.boardNumber) {
+            return;
+          }
+        }
+        this.isItemModalBoardNumberValidation = true;
+        this.aircraftsService.isBoardNumberExists(value).subscribe((result) => {
+          this.isItemModalBoardNumberExists = result.value;
+          this.isItemModalBoardNumberValidation = false;
+        },() => {
+          this.isItemModalBoardNumberValidation = false;
+          this.messageService.error('Операция поиска бортового номера не может быть выполнена');
+        });
+      }
+    );
     this.fetch();
   }
 }

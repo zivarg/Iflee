@@ -98,6 +98,31 @@ namespace Iflee.Controllers
             
         }
 
+        [HttpGet("is-board-number-exists")]
+        public IActionResult IsBoardNumberExists(
+            [FromQuery] PsfReadAircraftsIsBoardNumberExists
+            psfReadAircraftsIsBoardNumberExists)
+        {
+            string sqlQuery = @"SELECT 1 AS id, CASE WHEN COUNT(*) > 0 THEN 
+                TRUE ELSE FALSE END AS value FROM aircrafts WHERE 
+                board_number = @aircraftBoardNumber;";
+            try
+            {
+                var aircraftsIsBoardNumbersExists = ifleeContext
+                    .aircraftsIsBoardNumbersExists.FromSql(
+                    sqlQuery,
+                    new NpgsqlParameter("@aircraftBoardNumber",
+                    psfReadAircraftsIsBoardNumberExists.IsValid()
+                    ? psfReadAircraftsIsBoardNumberExists.BoardNumber
+                    : "")).ToList();
+                return Ok(aircraftsIsBoardNumbersExists.FirstOrDefault());
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+        }
+
         [HttpPost]
         public IActionResult Post([FromBody] PsfCreateAircraft
             psfCreateAircraft)
@@ -194,7 +219,7 @@ namespace Iflee.Controllers
             }
         }
 
-        [Route("total")]
+        [HttpGet("total")]
         public IActionResult Total()
         {
             string sqlQuery = @"SELECT 1 AS id, COUNT(*) AS value FROM 

@@ -1,4 +1,4 @@
-<button nz-button nzType="primary" [disabled]="loading">Добавить новый самолет</button>
+<button nz-button nzType="primary" [disabled]="loading" (click)="showItemModal()">Добавить новый самолет</button>
 <button nz-button nzType="default" [disabled]="loading" (click)="fetch()">Обновить</button>
 <nz-table
   #ajaxTable
@@ -28,7 +28,7 @@
       <td>{{ data.model }}</td>
       <td>{{ data.type }}</td>
       <td>
-        <button nz-button nzType="default">Редактировать</button>
+        <button nz-button nzType="default" (click)="showItemModal(data.id)">Редактировать</button>
         <a nz-popconfirm
            nzTitle="Вы уверены, что хотите удалить?"
            nzOkText="Да"
@@ -40,3 +40,33 @@
     </tr>
   </tbody>
 </nz-table>
+<nz-modal [(nzVisible)]="isVisibleItemModal"
+          [nzClosable]=false
+          [nzTitle]="editId !==-1 ? 'Редактирование самолета':'Добавление нового самолета'"
+          (nzOnCancel)="itemModalCancel()"
+          (nzOnOk)="itemModalOk()"
+          [nzOkDisabled]=!isItemModalDataValid()
+>
+  <form nz-form [formGroup]="itemForm">
+    <nz-form-item>
+      <nz-form-label>Бортовой номер</nz-form-label>
+      <nz-form-control [nzValidateStatus]="itemForm.get('boardNumber')?.dirty
+          && !itemForm.get('boardNumber')?.errors && isItemModalBoardNumberExists ? 'error': ''">
+        <input nz-input formControlName="boardNumber" placeholder="Введите бортовой номер" />
+        <nz-form-explain
+          *ngIf="itemForm.get('boardNumber')?.dirty
+          && itemForm.get('boardNumber')?.errors && !isItemModalBoardNumberExists"
+        >
+          Введите корректный бортовой номер!
+        </nz-form-explain>
+        <nz-form-explain
+          *ngIf="itemForm.get('boardNumber')?.dirty
+          && !itemForm.get('boardNumber')?.errors && isItemModalBoardNumberExists"
+        >
+          Введенный бортовой номер уже существует!
+        </nz-form-explain>
+      </nz-form-control>
+      <nz-spin nzSimple [nzSpinning]="isItemModalBoardNumberValidation"></nz-spin>
+    </nz-form-item>
+  </form>
+</nz-modal>

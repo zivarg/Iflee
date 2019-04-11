@@ -17,5 +17,7 @@ namespace Iflee.Models
 
         public DbSet<Aircraft> Aircrafts { get; set; }
         public DbSet<AircraftsTotal> aircraftsTotals { get; set; }
+        public DbSet<AircraftsIsBoardNumberExists>
+            aircraftsIsBoardNumbersExists { get; set; }
     }
 }
