@@ -88,6 +88,9 @@ export class AircraftFormBoardNumberComponent implements OnInit {
   }
 
   isShowRequiredError(): boolean {
+    if (!this.isDirtyInvalid()) {
+      return false;
+    }
     if (this.isDirtyValid()) {
       return false;
     }
@@ -98,7 +101,7 @@ export class AircraftFormBoardNumberComponent implements OnInit {
   }
 
   isShowMaxLengthError(): boolean {
-    if (this.isDirtyValid()) {
+    if (!this.isDirtyInvalid()) {
       return false;
     }
     if (this.isShowRequiredError()) {
@@ -111,7 +114,7 @@ export class AircraftFormBoardNumberComponent implements OnInit {
   }
 
   isShowDbValueFoundError(): boolean {
-    if (this.isDirtyValid()) {
+    if (!this.isDirtyInvalid()) {
       return false;
     }
     if (this.isShowRequiredError()) {

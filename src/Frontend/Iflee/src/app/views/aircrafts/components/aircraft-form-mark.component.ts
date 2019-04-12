@@ -87,7 +87,7 @@ export class AircraftFormMarkComponent implements OnInit {
   }
 
   isShowRequiredError(): boolean {
-    if (this.isDirtyValid()) {
+    if (!this.isDirtyInvalid()) {
       return false;
     }
     if (this.control.errors === null) {
@@ -97,7 +97,7 @@ export class AircraftFormMarkComponent implements OnInit {
   }
 
   isShowMaxLengthError(): boolean {
-    if (this.isDirtyValid()) {
+    if (!this.isDirtyInvalid()) {
       return false;
     }
     if (this.isShowRequiredError()) {
@@ -110,7 +110,7 @@ export class AircraftFormMarkComponent implements OnInit {
   }
 
   isShowDbValueFoundError(): boolean {
-    if (this.isDirtyValid()) {
+    if (!this.isDirtyInvalid()) {
       return false;
     }
     if (this.isShowRequiredError()) {
