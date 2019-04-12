@@ -98,24 +98,51 @@ namespace Iflee.Controllers
             
         }
 
-        [HttpGet("is-board-number-exists")]
-        public IActionResult IsBoardNumberExists(
-            [FromQuery] PsfReadAircraftsIsBoardNumberExists
-            psfReadAircraftsIsBoardNumberExists)
+        [HttpGet("is-exists")]
+        public IActionResult IsExists( [FromQuery] PsfReadAircraftsIsExists
+            psfReadAircraftsIsExists)
         {
-            string sqlQuery = @"SELECT 1 AS id, CASE WHEN COUNT(*) > 0 THEN 
-                TRUE ELSE FALSE END AS value FROM aircrafts WHERE 
-                board_number = @aircraftBoardNumber;";
+            if (!psfReadAircraftsIsExists.IsValid())
+            {
+                return BadRequest();
+            }
+            StringBuilder sqlQueryBuilder = new StringBuilder(
+                @"SELECT 1 AS id, CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE 
+                END AS value FROM aircrafts WHERE");
+            List<NpgsqlParameter> sqlQueryParameters
+                = new List<NpgsqlParameter>();
+            if (psfReadAircraftsIsExists.IsTypeValid())
+            {
+                sqlQueryBuilder.Append(" type = @aircraftType");
+                sqlQueryParameters.Add(new NpgsqlParameter("@aircraftType",
+                    psfReadAircraftsIsExists.Type));
+            }
+            if (psfReadAircraftsIsExists.IsBoardNumberValid())
+            {
+                sqlQueryBuilder.Append(" board_number = @aircraftBoardNumber");
+                sqlQueryParameters.Add(new NpgsqlParameter(
+                    "@aircraftBoardNumber",
+                    psfReadAircraftsIsExists.BoardNumber));
+            }
+            if (psfReadAircraftsIsExists.IsMarkValid())
+            {
+                sqlQueryBuilder.Append(" mark = @aircraftMark");
+                sqlQueryParameters.Add(new NpgsqlParameter("@aircraftMark",
+                    psfReadAircraftsIsExists.Mark));
+            }
+            if (psfReadAircraftsIsExists.IsModelValid())
+            {
+                sqlQueryBuilder.Append(" model = @aircraftModel");
+                sqlQueryParameters.Add(new NpgsqlParameter("@aircraftModel",
+                    psfReadAircraftsIsExists.Model));
+            }
+            sqlQueryBuilder.Append(";");
+            string sqlQuery = sqlQueryBuilder.ToString();
             try
             {
-                var aircraftsIsBoardNumbersExists = ifleeContext
-                    .aircraftsIsBoardNumbersExists.FromSql(
-                    sqlQuery,
-                    new NpgsqlParameter("@aircraftBoardNumber",
-                    psfReadAircraftsIsBoardNumberExists.IsValid()
-                    ? psfReadAircraftsIsBoardNumberExists.BoardNumber
-                    : "")).ToList();
-                return Ok(aircraftsIsBoardNumbersExists.FirstOrDefault());
+                var aircraftsIsExists = ifleeContext.aircraftsIsExists.FromSql(
+                    sqlQuery, sqlQueryParameters.ToArray()).ToList();
+                return Ok(aircraftsIsExists.FirstOrDefault());
             }
             catch (Exception)
             {
@@ -164,9 +191,8 @@ namespace Iflee.Controllers
         public IActionResult Put(int id, [FromQuery] PsfUpdateAircraft
             psfUpdateAircraft)
         {
-            if (!psfUpdateAircraft.IsValid())
+            if (!psfUpdateAircraft.IsValid()) { 
                 return BadRequest();
-            {
             }
             StringBuilder sqlQueryBuilder = new StringBuilder(
                 "UPDATE aircrafts SET");

@@ -6,6 +6,10 @@ import {CommonModule} from '@angular/common';
 import {AircraftsRoutingModule} from './aircrafts-routing.module';
 import {AircraftsTableComponent} from './components/aircrafts-table.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {AircraftFormModalComponent} from './components/aircraft-form-modal.component';
+import {AircraftFormComponent} from './components/aircraft-form.component';
+import {AircraftFormBoardNumberComponent} from './components/aircraft-form-board-number.component';
+import {AircraftFormMarkComponent} from './components/aircraft-form-mark.component';
 
 @NgModule({
   imports: [
@@ -15,6 +19,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     AircraftsRoutingModule,
     NgZorroAntdModule
   ],
-  declarations: [ AircraftsComponent, AircraftsTableComponent ]
+  declarations: [ AircraftsComponent, AircraftsTableComponent, AircraftFormModalComponent, AircraftFormComponent,
+    AircraftFormBoardNumberComponent, AircraftFormMarkComponent ]
 })
 export class AircraftsModule { }

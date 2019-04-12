@@ -1,0 +1,17 @@
+<nz-form-item>
+  <nz-form-label [nzRequired]="nz2Required">{{nz2Title}}</nz-form-label>
+  <nz-form-control [nzValidateStatus]="!isValidation() && !isDirtyValid() ? 'error' : ''">
+    <input nz-input [formControl]="nz2Control" placeholder="Введите бортовой номер" />
+    <nz-form-explain *ngIf="isShowRequiredError()">
+      {{nz2RequiredErrorMsg}}
+    </nz-form-explain>
+    <nz-form-explain *ngIf="isShowMaxLengthError()">
+      {{nz2MaxLengthErrorMsg}}
+    </nz-form-explain>
+    <nz-form-explain *ngIf="isShowDbValueFoundError()">
+      {{nz2DbValueFoundErrorMsg}}
+    </nz-form-explain>
+    <nz-spin nzSimple [nzSpinning]="isDbSearchStarted"></nz-spin>
+  </nz-form-control>
+</nz-form-item>
+

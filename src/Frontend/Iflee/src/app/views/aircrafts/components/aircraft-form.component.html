@@ -1,0 +1,10 @@
+<form nz-form>
+  <aircraft-form-board-number [nz2WMain]="wMain" [nz2Control]="boardNumber"></aircraft-form-board-number>
+  <aircraft-form-mark [nz2WMain]="wMain" [nz2Control]="mark"></aircraft-form-mark>
+  <nz-form-item>
+    <nz-form-control [nzOffset]="8" [nzSpan]="12">
+      <button nz-button nzType="primary" [disabled]="!isValid()">Ок</button>
+      <button nz-button (click)="nzOnCancel()">Отмена</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>

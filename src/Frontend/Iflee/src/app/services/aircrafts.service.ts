@@ -3,7 +3,7 @@ import { Component, Injectable, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import {AircraftModel} from '../models/aircraft.model';
 import {AircraftsTotalModel} from '../models/aircrafts-total.model';
-import {AircraftsIsBoardNumberExists} from '../models/aircrafts-is-board-number-exists';
+import {AircraftsIsExists} from '../models/aircrafts-is-exists';
 
 @Injectable()
 export class AircraftsService {
@@ -23,10 +23,10 @@ export class AircraftsService {
     return this.http.get<AircraftsTotalModel>(`${this.apiAircraftsUrl}/total`);
   }
 
-  isBoardNumberExists(boardNumber: string): Observable<AircraftsIsBoardNumberExists> {
+  isBoardNumberExists(boardNumber: string): Observable<AircraftsIsExists> {
     const params = new HttpParams()
       .append('boardNumber', `${boardNumber}`);
-    return this.http.get<AircraftsIsBoardNumberExists>(`${this.apiAircraftsUrl}/is-board-number-exists`, {params});
+    return this.http.get<AircraftsIsExists>(`${this.apiAircraftsUrl}/is-exists`, {params});
   }
 
   delete(id: bigint): Observable<{}> {

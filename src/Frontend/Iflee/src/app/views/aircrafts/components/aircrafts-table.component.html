@@ -1,4 +1,4 @@
-<button nz-button nzType="primary" [disabled]="loading" (click)="showItemModal()">Добавить новый самолет</button>
+<button nz-button nzType="primary" [disabled]="loading" (click)="showAircraftNFormModal()">Добавить новый самолет</button>
 <button nz-button nzType="default" [disabled]="loading" (click)="fetch()">Обновить</button>
 <nz-table
   #ajaxTable
@@ -28,7 +28,10 @@
       <td>{{ data.model }}</td>
       <td>{{ data.type }}</td>
       <td>
-        <button nz-button nzType="default" (click)="showItemModal(data.id)">Редактировать</button>
+        <button nz-button nzType="default"
+                (click)="showAircraftEFormModal(data.id, data.boardNumber, data.mark, data.model, data.type)">
+          Редактировать
+        </button>
         <a nz-popconfirm
            nzTitle="Вы уверены, что хотите удалить?"
            nzOkText="Да"
@@ -40,33 +43,89 @@
     </tr>
   </tbody>
 </nz-table>
-<nz-modal [(nzVisible)]="isVisibleItemModal"
-          [nzClosable]=false
-          [nzTitle]="editId !==-1 ? 'Редактирование самолета':'Добавление нового самолета'"
-          (nzOnCancel)="itemModalCancel()"
-          (nzOnOk)="itemModalOk()"
-          [nzOkDisabled]=!isItemModalDataValid()
->
-  <form nz-form [formGroup]="itemForm">
-    <nz-form-item>
-      <nz-form-label>Бортовой номер</nz-form-label>
-      <nz-form-control [nzValidateStatus]="itemForm.get('boardNumber')?.dirty
-          && !itemForm.get('boardNumber')?.errors && isItemModalBoardNumberExists ? 'error': ''">
-        <input nz-input formControlName="boardNumber" placeholder="Введите бортовой номер" />
-        <nz-form-explain
-          *ngIf="itemForm.get('boardNumber')?.dirty
-          && itemForm.get('boardNumber')?.errors && !isItemModalBoardNumberExists"
-        >
-          Введите корректный бортовой номер!
-        </nz-form-explain>
-        <nz-form-explain
-          *ngIf="itemForm.get('boardNumber')?.dirty
-          && !itemForm.get('boardNumber')?.errors && isItemModalBoardNumberExists"
-        >
-          Введенный бортовой номер уже существует!
-        </nz-form-explain>
-      </nz-form-control>
-      <nz-spin nzSimple [nzSpinning]="isItemModalBoardNumberValidation"></nz-spin>
-    </nz-form-item>
-  </form>
-</nz-modal>
+<aircraft-form-modal
+  [nz2Data]="aircraftFormData"
+  [nz2Visible]="isAircraftFormModalVisible"
+  [nz2IsNMode]="isAircraftFormModalNMode"
+  [nz2NTitle]="'Добавление нового самолета'"
+  [nz2ETitle]="'Редактирование самолета'"
+  (nz2OnCancel)="cancelAircraftFormModal()">
+</aircraft-form-modal>
+<!--<nz-modal [(nzVisible)]="isVisibleItemModal"-->
+<!--          [nzClosable]=false-->
+<!--          [nzTitle]="editId !==-1 ? 'Редактирование самолета':'Добавление нового самолета'"-->
+<!--          (nzOnCancel)="itemModalCancel()"-->
+<!--          (nzOnOk)="itemModalOk()"-->
+<!--          [nzOkDisabled]=!isItemModalDataValid()-->
+<!--          [nzFooter]="null"-->
+<!--&gt;-->
+<!--  <form nz-form [formGroup]="itemForm">-->
+<!--    <nz-form-item>-->
+<!--      <nz-form-label [nzRequired]="true">Бортовой номер</nz-form-label>-->
+<!--      <nz-form-control [nzValidateStatus]="itemForm.get('boardNumber')?.dirty-->
+<!--          && !itemForm.get('boardNumber')?.errors && !itemForm.get('boardNumber')?.errors['maxlength']-->
+<!--          && isItemModalBoardNumberExists ? 'error': ''">-->
+<!--        <input nz-input formControlName="boardNumber" placeholder="Введите бортовой номер" />-->
+<!--        <nz-form-explain-->
+<!--          *ngIf="itemForm.get('boardNumber')?.dirty && itemForm.get('boardNumber')?.errors-->
+<!--          && !itemForm.get('boardNumber')?.errors['maxlength'] && !isItemModalBoardNumberExists"-->
+<!--        >-->
+<!--          Введите корректный бортовой номер!-->
+<!--        </nz-form-explain>-->
+<!--        <nz-form-explain-->
+<!--          *ngIf="itemForm.get('boardNumber')?.dirty && itemForm.get('boardNumber')?.errors-->
+<!--          && itemForm.get('boardNumber')?.errors['maxlength'] && !isItemModalBoardNumberExists"-->
+<!--        >-->
+<!--          Бортовой номер не должен быть длинее 20 символов!-->
+<!--        </nz-form-explain>-->
+<!--        <nz-form-explain-->
+<!--          *ngIf="itemForm.get('boardNumber')?.dirty && !itemForm.get('boardNumber')?.errors-->
+<!--          && !itemForm.get('boardNumber')?.errors['maxlength'] && isItemModalBoardNumberExists"-->
+<!--        >-->
+<!--          Введенный бортовой номер уже существует!-->
+<!--        </nz-form-explain>-->
+<!--        <nz-spin nzSimple [nzSpinning]="isItemModalBoardNumberValidation"></nz-spin>-->
+<!--      </nz-form-control>-->
+<!--    </nz-form-item>-->
+<!--    <nz-form-item>-->
+<!--      <nz-form-label [nzRequired]="true">Марка</nz-form-label>-->
+<!--      <nz-form-control>-->
+<!--        <input nz-input formControlName="mark" placeholder="Введите марку" />-->
+<!--        <nz-form-explain-->
+<!--          *ngIf="itemForm.get('mark')?.dirty && itemForm.get('mark')?.errors-->
+<!--          && !itemForm.get('mark')?.errors['maxlength']"-->
+<!--        >-->
+<!--          Введите корректную марку!-->
+<!--        </nz-form-explain>-->
+<!--        <nz-form-explain-->
+<!--          *ngIf="itemForm.get('mark')?.dirty && itemForm.get('mark')?.errors-->
+<!--          && itemForm.get('mark')?.errors['maxlength']"-->
+<!--        >-->
+<!--          Марка не должна быть длинее 10 символов!-->
+<!--        </nz-form-explain>-->
+<!--      </nz-form-control>-->
+<!--    </nz-form-item>-->
+<!--    <nz-form-item>-->
+<!--      <nz-form-label [nzRequired]="true">Модель</nz-form-label>-->
+<!--      <nz-form-control>-->
+<!--        <input nz-input formControlName="model" placeholder="Введите модель" />-->
+<!--        <nz-form-explain-->
+<!--          *ngIf="itemForm.get('model')?.dirty && itemForm.get('model')?.errors"-->
+<!--        >-->
+<!--          Введите корректную модель!-->
+<!--        </nz-form-explain>-->
+<!--      </nz-form-control>-->
+<!--    </nz-form-item>-->
+<!--    <nz-form-item>-->
+<!--      <nz-form-label [nzRequired]="true">Тип</nz-form-label>-->
+<!--      <nz-form-control>-->
+<!--        <input nz-input formControlName="type" placeholder="Введите тип" />-->
+<!--        <nz-form-explain-->
+<!--          *ngIf="itemForm.get('type')?.dirty && itemForm.get('type')?.errors"-->
+<!--        >-->
+<!--          Введите корректный тип!-->
+<!--        </nz-form-explain>-->
+<!--      </nz-form-control>-->
+<!--    </nz-form-item>-->
+<!--  </form>-->
+<!--</nz-modal>-->

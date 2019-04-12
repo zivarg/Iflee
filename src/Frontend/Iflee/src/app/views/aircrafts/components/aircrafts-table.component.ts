@@ -3,6 +3,7 @@ import {AircraftsService} from '../../../services/aircrafts.service';
 import {forkJoin} from 'rxjs/internal/observable/forkJoin';
 import {NzMessageService} from 'ng-zorro-antd';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AircraftModel} from '../../../models/aircraft.model';
 
 @Component({
   selector: 'aircrafts-table',
@@ -18,53 +19,38 @@ export class AircraftsTableComponent implements OnInit {
   listOfData = [];
   loading = true;
   isVisibleItemModal = false;
-  editId = -1;
   itemForm: FormGroup;
-  isItemModalBoardNumberValidation = false;
   isItemModalBoardNumberExists = false;
+
+  // New struct
+  isAircraftFormModalVisible = false;
+  isAircraftFormModalNMode = false;
+  aircraftFormData: AircraftModel;
 
   constructor(private aircraftsService: AircraftsService, private messageService: NzMessageService,
               private formBuilder: FormBuilder) {}
 
-  itemModalOk(): void {
-    this.isVisibleItemModal = false;
+  showAircraftNFormModal(): void {
+    this.isAircraftFormModalNMode = true;
+    this.isAircraftFormModalVisible = true;
+    this.aircraftFormData = null;
   }
 
-  editIndex(id: number): number {
-    if (id === -1) {
-      return -1;
-    }
-    for (let i = 0; i < this.listOfData.length; i++) {
-      if (this.listOfData[i].id === id) {
-        return i;
-      }
-    }
-    return -1;
+  showAircraftEFormModal(id: bigint, boardNumber: string, mark: string, model: string, type: string): void {
+    this.isAircraftFormModalNMode = false;
+    this.isAircraftFormModalVisible = true;
+    const aircraftModel: AircraftModel = {
+      id: id,
+      boardNumber: boardNumber,
+      mark: mark,
+      model: model,
+      type: type
+    };
+    this.aircraftFormData = aircraftModel;
   }
 
-  isItemModalBoardNumberValid(): boolean {
-    return this.itemForm.get('boardNumber').dirty && !this.itemForm.get('boardNumber').errors && !this.isItemModalBoardNumberExists;
-  }
-
-  isItemModalDataValid(): boolean {
-    return this.isItemModalBoardNumberValid();
-  }
-
-  itemModalCancel(): void {
-    this.editId = -1;
-    this.isVisibleItemModal = false;
-  }
-
-  showItemModal(id: number = -1): void {
-    this.itemForm.reset();
-    if (id !== -1) {
-      const listItem = this.listOfData[this.editIndex(id)];
-      this.itemForm.patchValue({
-        boardNumber: listItem.boardNumber
-      });
-    }
-    this.editId = id;
-    this.isVisibleItemModal = true;
+  cancelAircraftFormModal(): void {
+    this.isAircraftFormModalVisible = false;
   }
 
   fetch(fromFirstPage: boolean = false): void {
@@ -111,31 +97,6 @@ export class AircraftsTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.itemForm = this.formBuilder.group({
-      boardNumber: [null, [Validators.required]]
-    });
-    this.itemForm.controls['boardNumber'].valueChanges.subscribe(
-      (value) => {
-        this.isItemModalBoardNumberExists = false;
-        if (value === '') {
-          return;
-        }
-        if ( this.editId !== -1) {
-          const listItem = this.listOfData[this.editIndex(this.editId)];
-          if (value === listItem.boardNumber) {
-            return;
-          }
-        }
-        this.isItemModalBoardNumberValidation = true;
-        this.aircraftsService.isBoardNumberExists(value).subscribe((result) => {
-          this.isItemModalBoardNumberExists = result.value;
-          this.isItemModalBoardNumberValidation = false;
-        },() => {
-          this.isItemModalBoardNumberValidation = false;
-          this.messageService.error('Операция поиска бортового номера не может быть выполнена');
-        });
-      }
-    );
     this.fetch();
   }
 }

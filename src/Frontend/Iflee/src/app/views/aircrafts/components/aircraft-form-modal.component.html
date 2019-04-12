@@ -1,0 +1,10 @@
+<nz-modal
+  [nzVisible]="nz2Visible"
+  [nzClosable]="false"
+  [nzFooter]="null"
+  [nzTitle]="nz2Title()">
+  <aircraft-form
+    [nz2Data]="nz2Data"
+    (nz2OnCancel)="hide()">
+  </aircraft-form>
+</nz-modal>
