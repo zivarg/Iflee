@@ -19,8 +19,8 @@ export class AircraftFormComponent implements OnInit {
     if (data !== null && data !== undefined) {
       if (this.isRefValid(this.boardNumber)) { this.boardNumber.setValue(data.boardNumber); }
       if (this.isRefValid(this.mark)) { this.mark.setValue(data.mark); }
-      if (this.isRefValid(this.model)) { this.mark.setValue(data.model); }
-      if (this.isRefValid(this.type)) { this.mark.setValue(data.type); }
+      if (this.isRefValid(this.model)) { this.model.setValue(data.model); }
+      if (this.isRefValid(this.type)) { this.type.setValue(data.type); }
     } else {
       if (this.isRefValid(this.boardNumber)) { this.boardNumber.setValue(''); }
       if (this.isRefValid(this.mark)) { this.mark.setValue(''); }
