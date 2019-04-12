@@ -1,7 +1,7 @@
 <nz-form-item>
   <nz-form-label [nzRequired]="nz2Required">{{nz2Title}}</nz-form-label>
   <nz-form-control [nzValidateStatus]="!isValidation() && !isDirtyValid() ? 'error' : ''">
-    <input nz-input [formControl]="nz2Control" placeholder="Введите бортовой номер" />
+    <input nz-input [formControl]="control" placeholder="Введите бортовой номер" />
     <nz-form-explain *ngIf="isShowRequiredError()">
       {{nz2RequiredErrorMsg}}
     </nz-form-explain>

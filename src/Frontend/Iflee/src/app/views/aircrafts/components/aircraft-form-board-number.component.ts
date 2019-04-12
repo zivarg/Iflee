@@ -12,8 +12,9 @@ import {AircraftFormComponent} from './aircraft-form.component';
 })
 
 export class AircraftFormBoardNumberComponent implements OnInit {
-  @Input() nz2WMain: AircraftFormComponent;
-  @Input() nz2Control: FormControl;
+  private control: FormControl = new FormControl(null, [Validators.required, Validators.maxLength(20)]);
+  @Input() nz2FormGroup: AircraftFormComponent;
+  @Input() nz2Id = 'boardNumber';
   @Input() nz2Required = true;
   @Input() nz2Title = 'Бортовой номер';
   @Input() nz2RequiredErrorMsg = 'Введите бортовой номер!';
@@ -39,38 +40,42 @@ export class AircraftFormBoardNumberComponent implements OnInit {
     });
   }
 
+  reset(): void {
+    this.control.reset();
+  }
+
   setValue(value: string) {
     this.originalValue = value;
-    this.nz2Control.setValue(value);
+    this.control.setValue(value);
   }
 
   value(): string {
-    return this.nz2Control.value;
+    return this.control.value;
   }
 
   isValidation(): boolean {
-    return this.nz2Control.pending || this.isDbSearchStarted;
+    return this.control.pending || this.isDbSearchStarted;
   }
 
   isValid(): boolean {
-    return !this.isValidation() && this.nz2Control.valid && !this.isDbValueFound;
+    return !this.isValidation() && this.control.valid && !this.isDbValueFound;
   }
 
   isDirtyValid(): boolean {
-    if (!this.nz2Control.dirty) {
+    if (!this.control.dirty) {
       return true;
     }
-    return this.nz2Control.dirty && this.isValid();
+    return this.control.dirty && this.isValid();
   }
 
   isShowRequiredError(): boolean {
     if (this.isDirtyValid()) {
       return false;
     }
-    if (this.nz2Control.errors === null) {
+    if (this.control.errors === null) {
       return false;
     }
-    return this.nz2Control.errors['required'] !== null && this.nz2Control.errors['required'] !== undefined;
+    return this.control.errors['required'] !== null && this.control.errors['required'] !== undefined;
   }
 
   isShowMaxLengthError(): boolean {
@@ -80,10 +85,10 @@ export class AircraftFormBoardNumberComponent implements OnInit {
     if (this.isShowRequiredError()) {
       return false;
     }
-    if (this.nz2Control.errors === null) {
+    if (this.control.errors === null) {
       return false;
     }
-    return this.nz2Control.errors['maxlength'] !== null && this.nz2Control.errors['maxlength'] !== undefined;
+    return this.control.errors['maxlength'] !== null && this.control.errors['maxlength'] !== undefined;
   }
 
   isShowDbValueFoundError(): boolean {
@@ -102,9 +107,9 @@ export class AircraftFormBoardNumberComponent implements OnInit {
   constructor(private aircraftsService: AircraftsService, private messageService: NzMessageService) {}
 
   ngOnInit(): void {
-    this.nz2WMain.setWBoardNumber(this);
+    this.nz2FormGroup.addControl(this.nz2Id, this);
     if (this.nz2IsDbSearchEnabled) {
-      this.nz2Control.valueChanges.subscribe(
+      this.control.valueChanges.subscribe(
         (value) => {
           if (value !== '' && value !== this.originalValue) {
             this.dbSearch(value);

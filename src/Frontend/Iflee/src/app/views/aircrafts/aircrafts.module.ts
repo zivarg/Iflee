@@ -10,6 +10,8 @@ import {AircraftFormModalComponent} from './components/aircraft-form-modal.compo
 import {AircraftFormComponent} from './components/aircraft-form.component';
 import {AircraftFormBoardNumberComponent} from './components/aircraft-form-board-number.component';
 import {AircraftFormMarkComponent} from './components/aircraft-form-mark.component';
+import {AircraftFormModelComponent} from './components/aircraft-form-model.component';
+import {AircraftFormTypeComponent} from './components/aircraft-form-type.component';
 
 @NgModule({
   imports: [
@@ -20,6 +22,6 @@ import {AircraftFormMarkComponent} from './components/aircraft-form-mark.compone
     NgZorroAntdModule
   ],
   declarations: [ AircraftsComponent, AircraftsTableComponent, AircraftFormModalComponent, AircraftFormComponent,
-    AircraftFormBoardNumberComponent, AircraftFormMarkComponent ]
+    AircraftFormBoardNumberComponent, AircraftFormMarkComponent, AircraftFormModelComponent, AircraftFormTypeComponent ]
 })
 export class AircraftsModule { }

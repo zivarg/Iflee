@@ -5,22 +5,22 @@ import {FormControl, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd';
 
 @Component({
-  selector: 'aircraft-form-mark',
+  selector: 'aircraft-form-type',
   providers: [AircraftsService],
-  templateUrl: 'aircraft-form-mark.component.html',
-  styleUrls: ['aircraft-form-mark.component.css']
+  templateUrl: 'aircraft-form-type.component.html',
+  styleUrls: ['aircraft-form-type.component.css']
 })
 
-export class AircraftFormMarkComponent implements OnInit {
-  private control: FormControl = new FormControl(null, [Validators.required, Validators.maxLength(10)]);
+export class AircraftFormTypeComponent implements OnInit {
+  private control: FormControl = new FormControl(null, [Validators.required, Validators.maxLength(255)]);
   @Input() nz2FormGroup: AircraftFormComponent;
-  @Input() nz2Id = 'mark';
+  @Input() nz2Id = 'type';
   @Input() nz2Required = true;
-  @Input() nz2Title = 'Марка';
-  @Input() nz2RequiredErrorMsg = 'Введите марку!';
-  @Input() nz2MaxLengthErrorMsg = 'Марка не должен быть длинее 10 символов!';
-  @Input() nz2DbValueFoundErrorMsg = 'Марка уже существует!';
-  @Input() nz2DbSearchErrorMsg = 'Операция поиска марки не может быть выполнена';
+  @Input() nz2Title = 'Тип';
+  @Input() nz2RequiredErrorMsg = 'Введите тип!';
+  @Input() nz2MaxLengthErrorMsg = 'Тип не должен быть длинее 255 символов!';
+  @Input() nz2DbValueFoundErrorMsg = 'Тип уже существует!';
+  @Input() nz2DbSearchErrorMsg = 'Операция поиска типа не может быть выполнена';
   @Input() nz2IsDbSearchEnabled = false;
   private isDbSearchStarted = false;
   private isDbValueFound = false;

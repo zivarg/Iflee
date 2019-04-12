@@ -4,6 +4,8 @@ import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {AircraftFormBoardNumberComponent} from './aircraft-form-board-number.component';
 import {AircraftModel} from '../../../models/aircraft.model';
 import {AircraftFormMarkComponent} from './aircraft-form-mark.component';
+import {AircraftFormModelComponent} from './aircraft-form-model.component';
+import {AircraftFormTypeComponent} from './aircraft-form-type.component';
 
 @Component({
   selector: 'aircraft-form',
@@ -15,68 +17,50 @@ import {AircraftFormMarkComponent} from './aircraft-form-mark.component';
 export class AircraftFormComponent implements OnInit {
   @Input() set nz2Data( data: AircraftModel ) {
     if (data !== null && data !== undefined) {
-      this.setBoardNumberValue(data.boardNumber);
-      this.setMarkValue(data.mark);
+      if (this.isRefValid(this.boardNumber)) { this.boardNumber.setValue(data.boardNumber); }
+      if (this.isRefValid(this.mark)) { this.mark.setValue(data.mark); }
+      if (this.isRefValid(this.model)) { this.mark.setValue(data.model); }
+      if (this.isRefValid(this.type)) { this.mark.setValue(data.type); }
     } else {
-      this.setBoardNumberValue('');
-      this.setMarkValue('');
+      if (this.isRefValid(this.boardNumber)) { this.boardNumber.setValue(''); }
+      if (this.isRefValid(this.mark)) { this.mark.setValue(''); }
+      if (this.isRefValid(this.model)) { this.model.setValue(''); }
+      if (this.isRefValid(this.type)) { this.type.setValue(''); }
     }
   }
-  constructor(private formBuilder: FormBuilder) {}
-  wMain = this;
-  boardNumber: FormControl = new FormControl(null, [Validators.required, Validators.maxLength(20)]);
-  wBoardNumber: AircraftFormBoardNumberComponent;
-  setWBoardNumber(wBoardNumber: AircraftFormBoardNumberComponent): void {
-    this.wBoardNumber = wBoardNumber;
-  }
-  isWBoardNumberNull(): boolean {
-    return this.wBoardNumber === null || this.wBoardNumber === undefined;
-  }
-  setBoardNumberValue(value: string): void {
-    if (!this.isWBoardNumberNull()) {
-      this.wBoardNumber.setValue(value);
+  constructor() {}
+  formGroup = this;
+  boardNumber: AircraftFormBoardNumberComponent;
+  mark: AircraftFormMarkComponent;
+  model: AircraftFormModelComponent;
+  type: AircraftFormTypeComponent;
+  addControl(id: string, control: any ): void {
+    if (id === 'boardNumber') {
+      this.boardNumber = control;
+    } else if (id === 'mark') {
+      this.mark = control;
+    } else if (id === 'model') {
+      this.model = control;
+    } else if (id === 'type') {
+      this.type = control;
     }
+
   }
-  setBoardNumberReset(): void {
-    if (!this.isWBoardNumberNull()) {
-      this.boardNumber.reset();
-    }
-  }
-  isBoardNumberValid(): boolean {
-    if (!this.isWBoardNumberNull()) {
-      return this.wBoardNumber.isValid();
-    }
-  }
-  mark: FormControl = new FormControl(null, [Validators.required, Validators.maxLength(10)]);
-  wMark: AircraftFormMarkComponent;
-  setWMark(wMark: AircraftFormMarkComponent): void {
-    this.wMark = wMark;
-  }
-  isWMarkNull(): boolean {
-    return this.wMark === null || this.wMark === undefined;
-  }
-  setMarkValue(value: string): void {
-    if (!this.isWMarkNull()) {
-      this.wMark.setValue(value);
-    }
-  }
-  setMarkReset(): void {
-    if (!this.isWMarkNull()) {
-      this.mark.reset();
-    }
-  }
-  isMarkValid(): boolean {
-    if (!this.isWBoardNumberNull()) {
-      return this.wMark.isValid();
-    }
+  isRefValid(ref: any): boolean {
+    return ref !== null && ref !== undefined;
   }
   isValid(): boolean {
-    return this.isBoardNumberValid() && this.isMarkValid();
+    if (!this.isRefValid(this.boardNumber) || !this.isRefValid(this.mark) || !this.isRefValid(this.model)
+      || !this.isRefValid(this.type)) {
+      return false;
+    }
+    return this.boardNumber.isValid() && this.mark.isValid() && this.model.isValid() && this.type.isValid();
   }
-
   reset(): void {
-    this.setBoardNumberReset();
-    this.setMarkReset();
+    if (this.isRefValid(this.boardNumber)) { this.boardNumber.reset(); }
+    if (this.isRefValid(this.mark)) { this.mark.reset(); }
+    if (this.isRefValid(this.model)) { this.model.reset(); }
+    if (this.isRefValid(this.type)) { this.type.reset(); }
   }
   @Output() readonly nz2OnCancel = new EventEmitter<any>();
   private nzOnCancel(): void {

@@ -1,6 +1,8 @@
 <form nz-form>
-  <aircraft-form-board-number [nz2WMain]="wMain" [nz2Control]="boardNumber"></aircraft-form-board-number>
-  <aircraft-form-mark [nz2WMain]="wMain" [nz2Control]="mark"></aircraft-form-mark>
+  <aircraft-form-board-number [nz2FormGroup]="formGroup"></aircraft-form-board-number>
+  <aircraft-form-mark [nz2FormGroup]="formGroup"></aircraft-form-mark>
+  <aircraft-form-model [nz2FormGroup]="formGroup"></aircraft-form-model>
+  <aircraft-form-type [nz2FormGroup]="formGroup"></aircraft-form-type>
   <nz-form-item>
     <nz-form-control [nzOffset]="8" [nzSpan]="12">
       <button nz-button nzType="primary" [disabled]="!isValid()">Ок</button>
