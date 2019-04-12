@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AircraftsService} from '../../../services/aircrafts.service';
-import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {AircraftFormBoardNumberComponent} from './aircraft-form-board-number.component';
 import {AircraftModel} from '../../../models/aircraft.model';
 import {AircraftFormMarkComponent} from './aircraft-form-mark.component';
@@ -55,6 +54,72 @@ export class AircraftFormComponent implements OnInit {
       return false;
     }
     return this.boardNumber.isValid() && this.mark.isValid() && this.model.isValid() && this.type.isValid();
+  }
+  isDirty(): boolean {
+    if (this.isRefValid(this.boardNumber)) {
+      if (this.boardNumber.isDirty()) {
+        return true;
+      }
+    }
+    if (this.isRefValid(this.mark)) {
+      if (this.mark.isDirty()) {
+        return true;
+      }
+    }
+    if (this.isRefValid(this.model)) {
+      if (this.model.isDirty()) {
+        return true;
+      }
+    }
+    if (this.isRefValid(this.type)) {
+      if (this.type.isDirty()) {
+        return true;
+      }
+    }
+    return false;
+  }
+  isDataChanged(): boolean {
+    if (this.isRefValid(this.boardNumber)) {
+      if (this.boardNumber.isValueChanged()) {
+        return true;
+      }
+    }
+    if (this.isRefValid(this.mark)) {
+      if (this.mark.isValueChanged()) {
+        return true;
+      }
+    }
+    if (this.isRefValid(this.model)) {
+      if (this.model.isValueChanged()) {
+        return true;
+      }
+    }
+    if (this.isRefValid(this.type)) {
+      if (this.type.isValueChanged()) {
+        return true;
+      }
+    }
+    return false;
+  }
+  isDirtyValid(): boolean {
+    if (!this.isRefValid(this.boardNumber) || !this.isRefValid(this.mark) || !this.isRefValid(this.model)
+      || !this.isRefValid(this.type)) {
+      return false;
+    }
+    if (!this.isDirty()) {
+      return false;
+    }
+    return this.isDirty() && this.boardNumber.isValid() && this.mark.isValid() && this.model.isValid() && this.type.isValid();
+  }
+  isDirtyInvalid(): boolean {
+    if (!this.isRefValid(this.boardNumber) || !this.isRefValid(this.mark) || !this.isRefValid(this.model)
+      || !this.isRefValid(this.type)) {
+      return false;
+    }
+    if (!this.isDirty()) {
+      return false;
+    }
+    return this.isDirty() && !this.isValid();
   }
   reset(): void {
     if (this.isRefValid(this.boardNumber)) { this.boardNumber.reset(); }

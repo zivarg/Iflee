@@ -53,6 +53,13 @@ export class AircraftFormModelComponent implements OnInit {
     return this.control.value;
   }
 
+  isValueChanged(): boolean {
+    if (this.originalValue !== this.control.value) {
+      return true;
+    }
+    return false;
+  }
+
   isValidation(): boolean {
     return this.control.pending || this.isDbSearchStarted;
   }
@@ -61,11 +68,22 @@ export class AircraftFormModelComponent implements OnInit {
     return !this.isValidation() && this.control.valid && !this.isDbValueFound;
   }
 
+  isDirty(): boolean {
+    return this.control.dirty;
+  }
+
   isDirtyValid(): boolean {
     if (!this.control.dirty) {
-      return true;
+      return false;
     }
     return this.control.dirty && this.isValid();
+  }
+
+  isDirtyInvalid(): boolean {
+    if (!this.control.dirty) {
+      return false;
+    }
+    return this.control.dirty && !this.isValid();
   }
 
   isShowRequiredError(): boolean {
